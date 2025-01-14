@@ -9,23 +9,21 @@ import java.util.List;
 
 public class WekaKDE {
     public static void runKDE(List<JsonParser.EntityFeature> features) throws Exception {
-        // Define attributes
         ArrayList<Attribute> attributes = new ArrayList<>();
         attributes.add(new Attribute("longitude"));
         attributes.add(new Attribute("latitude"));
         attributes.add(new Attribute("charge"));
+        attributes.add(new Attribute("load"));
         attributes.add(new Attribute("routeLength"));
 
-        // Create dataset
         Instances dataset = new Instances("EntityFeatures", attributes, features.size());
         for (JsonParser.EntityFeature f : features) {
-            double[] values = {f.lon, f.lat, f.charge, f.routeLength};
+            double[] values = {f.lon, f.lat, f.charge, f.load, f.routeLength};
             dataset.add(new weka.core.DenseInstance(1.0, values));
         }
 
-        // Compute densities
         double[] densities = new double[dataset.size()];
-        double bandwidth = 1.0; // Bandwidth for the kernel
+        double bandwidth = 1.0;
 
         for (int i = 0; i < dataset.size(); i++) {
             double density = 0.0;
@@ -36,12 +34,12 @@ public class WekaKDE {
             densities[i] = density;
         }
 
-        // Identify anomalies
-        double densityThreshold = 0.06; // Low density threshold
-        System.out.println("\nKDE Anomalies:");
+        double densityThreshold = 0.01;
+        System.out.println("KDE Results (Density Estimation):");
         for (int i = 0; i < densities.length; i++) {
+            System.out.printf("Feature: %s -> Density: %.4f%n", features.get(i), densities[i]);
             if (densities[i] < densityThreshold) {
-                System.out.printf("Feature: %s -> Density: %.4f%n", features.get(i), densities[i]);
+                System.out.println("  -> Anomaly Detected: Facility underutilization or sparse behavior detected (Low Density)!");
             }
         }
     }
