@@ -9,7 +9,7 @@ import java.util.List;
 public class JsonParser {
     public static class EntityFeature {
         public String team;       // Team name
-        public String role;       // Entity role (e.g., car, drone, truck)
+        public String role;       // Entity role (e.g., car, drone)
         public double lon;        // Longitude
         public double lat;        // Latitude
         public double charge;     // Charge level
@@ -52,7 +52,10 @@ public class JsonParser {
                     double charge = entity.get("charge").asDouble();
                     double load = entity.get("load").asDouble();
                     int routeLength = entity.get("routeLength").asInt();
-                    String lastAction = entity.get("lastAction").asText();
+
+                    // Parse the lastAction object
+                    JsonNode lastActionNode = entity.get("lastAction");
+                    String lastAction = parseLastAction(lastActionNode);
 
                     features.add(new EntityFeature(team, role, lon, lat, charge, load, routeLength, lastAction));
                 }
@@ -62,4 +65,29 @@ public class JsonParser {
         }
         return features;
     }
+
+    /**
+     * Parses the lastAction object into a readable string.
+     *
+     * @param lastActionNode The JSON node containing the lastAction data.
+     * @return A string representation of the last action.
+     */
+    private static String parseLastAction(JsonNode lastActionNode) {
+        if (lastActionNode == null || lastActionNode.isNull()) {
+            return "None";
+        }
+        StringBuilder actionBuilder = new StringBuilder();
+        String result = lastActionNode.get("result").asText("unknown");
+        String type = lastActionNode.get("type").asText("unknown");
+        actionBuilder.append("").append(result).append(", ").append(type);
+
+        JsonNode paramsNode = lastActionNode.get("params");
+        if (paramsNode != null && paramsNode.isArray()) {
+            actionBuilder.append("").append(paramsNode.toString());
+        }
+        return actionBuilder.toString();
+    }
 }
+
+
+

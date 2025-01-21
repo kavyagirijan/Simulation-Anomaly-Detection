@@ -1,5 +1,4 @@
 package anomaly_detection;
-
 import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.Attribute;
@@ -23,10 +22,11 @@ public class WekaKDE {
         }
 
         double[] densities = new double[dataset.size()];
-        double bandwidth = 1.0;
+        double bandwidth = 1.0; // Adjust bandwidth for kernel smoothness
 
         for (int i = 0; i < dataset.size(); i++) {
             double density = 0.0;
+
             for (int j = 0; j < dataset.size(); j++) {
                 density += gaussianKernel(dataset.instance(i), dataset.instance(j), bandwidth);
             }
@@ -34,12 +34,13 @@ public class WekaKDE {
             densities[i] = density;
         }
 
-        double densityThreshold = 0.01;
+        double densityThreshold = 0.00142480;
         System.out.println("KDE Results (Density Estimation):");
         for (int i = 0; i < densities.length; i++) {
-            System.out.printf("Feature: %s -> Density: %.4f%n", features.get(i), densities[i]);
+            //System.out.printf("Feature: %s -> Density: %.4f%n", features.get(i), densities[i]);
             if (densities[i] < densityThreshold) {
-                System.out.println("  -> Anomaly Detected: Facility underutilization or sparse behavior detected (Low Density)!");
+                System.out.println("  -> Anomaly Detected (Low Density)!");
+                System.out.printf("Feature: %s -> Density: %.8f%n", features.get(i), densities[i]);
             }
         }
     }

@@ -1,5 +1,4 @@
 package anomaly_detection;
-
 import weka.clusterers.EM;
 import weka.core.DenseInstance;
 import weka.core.Instances;
@@ -30,11 +29,17 @@ public class WekaGMM {
         for (int i = 0; i < dataset.size(); i++) {
             int cluster = gmm.clusterInstance(dataset.get(i));
             double[] probabilities = gmm.distributionForInstance(dataset.get(i));
-            System.out.printf("Feature: %s -> Cluster: %d -> Likelihood: %.4f%n", features.get(i), cluster, probabilities[cluster]);
+            //System.out.printf("Feature: %s -> Cluster: %d -> Likelihood: %.4f%n", features.get(i), cluster, probabilities[cluster]);
+           
+            if (probabilities[cluster] < 0.51) {
+            	
+            	System.out.printf("Feature: %s -> Cluster: %d -> Likelihood: %.4f%n", features.get(i), cluster, probabilities[cluster]);
 
-            if (probabilities[cluster] < 0.2) {
-                System.out.println("  -> Anomaly Detected: Entity behavior or resource usage unlikely (Low Likelihood)!");
+                System.out.println("  -> Anomaly Detected (Low Likelihood)!");
             }
+            
+            
+            
         }
     }
 }
