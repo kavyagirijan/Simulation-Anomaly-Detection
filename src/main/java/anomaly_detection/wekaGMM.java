@@ -13,12 +13,12 @@ public class WekaGMM {
         attributes.add(new Attribute("longitude"));
         attributes.add(new Attribute("latitude"));
         attributes.add(new Attribute("charge"));
-        attributes.add(new Attribute("load"));
         attributes.add(new Attribute("routeLength"));
+        attributes.add(new Attribute("load"));
 
         Instances dataset = new Instances("EntityFeatures", attributes, features.size());
         for (JsonParser.EntityFeature f : features) {
-            double[] values = {f.lon, f.lat, f.charge, f.load, f.routeLength};
+            double[] values = {f.lon, f.lat, f.charge, f.routeLength, f.load};
             dataset.add(new DenseInstance(1.0, values));
         }
 
@@ -29,17 +29,14 @@ public class WekaGMM {
         for (int i = 0; i < dataset.size(); i++) {
             int cluster = gmm.clusterInstance(dataset.get(i));
             double[] probabilities = gmm.distributionForInstance(dataset.get(i));
-            //System.out.printf("Feature: %s -> Cluster: %d -> Likelihood: %.4f%n", features.get(i), cluster, probabilities[cluster]);
-           
-            if (probabilities[cluster] < 0.51) {
-            	
-            	System.out.printf("Feature: %s -> Cluster: %d -> Likelihood: %.4f%n", features.get(i), cluster, probabilities[cluster]);
 
+            //System.out.printf("Feature: %s -> Cluster: %d -> Likelihood: %.4f%n", features.get(i), cluster, probabilities[cluster]);
+
+            if (probabilities[cluster] <= 0.51) {
+            	System.out.printf("Feature: %s -> Cluster: %d -> Likelihood: %.4f%n", features.get(i), cluster, probabilities[cluster]);
                 System.out.println("  -> Anomaly Detected (Low Likelihood)!");
             }
-            
-            
-            
+
         }
     }
 }

@@ -27,20 +27,20 @@ public class WekaKMeans {
         kMeans.buildClusterer(dataset);
 
         System.out.println("K-Means Clustering Results:");
-        double threshold = 0.01;
+        double threshold = 0.011;
 
         for (int i = 0; i < dataset.size(); i++) {
             int cluster = kMeans.clusterInstance(dataset.get(i));
             double distance = kMeans.getDistanceFunction().distance(dataset.instance(i), kMeans.getClusterCentroids().instance(cluster));
-           // if(cluster==0) {
+         
             //System.out.printf("Feature: %s -> Cluster: %d -> Distance: %.4f%n", features.get(i), cluster, distance);
            
             if (distance < threshold) {
             	
-            	 System.out.printf("Feature: %s -> Cluster: %d -> Distance: %.4f%n", features.get(i), cluster, distance);
+           	 System.out.printf("Feature: %s -> Cluster: %d -> Distance: %.4f%n", features.get(i), cluster, distance);
                 System.out.println("  -> Anomaly Detected (Far from Centroid)!");
             }
-            //}
+          
         }
     }
 }
