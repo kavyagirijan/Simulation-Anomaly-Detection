@@ -22,7 +22,7 @@ public class WekaGMM {
             dataset.add(new DenseInstance(1.0, values));
         }
 
-        EM gmm = new EM();
+        EM gmm = new EM(); 
         gmm.buildClusterer(dataset);
 
         System.out.println("GMM Clustering Results:");
@@ -30,10 +30,11 @@ public class WekaGMM {
             int cluster = gmm.clusterInstance(dataset.get(i));
             double[] probabilities = gmm.distributionForInstance(dataset.get(i));
 
-            //System.out.printf("Feature: %s -> Cluster: %d -> Likelihood: %.4f%n", features.get(i), cluster, probabilities[cluster]);
+           // System.out.printf("Feature: %s -> Cluster: %d -> Likelihood: %.4f%n", features.get(i), cluster, probabilities[cluster]);
 
-            if (probabilities[cluster] <= 0.51) {
-            	System.out.printf("Feature: %s -> Cluster: %d -> Likelihood: %.4f%n", features.get(i), cluster, probabilities[cluster]);
+if (probabilities[cluster] <= 0.5) {
+            	//System.out.println(i);
+            	 System.out.printf("Feature: %s -> Cluster: %d -> Likelihood: %.4f%n", features.get(i), cluster, probabilities[cluster]);
                 System.out.println("  -> Anomaly Detected (Low Likelihood)!");
             }
 

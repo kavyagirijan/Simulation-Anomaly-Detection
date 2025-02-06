@@ -34,10 +34,10 @@ public class WekaKDE {
             densities[i] = density;
         }
 
-        double densityThreshold = 0.00142480;
+        double densityThreshold = 0.00006785;
         System.out.println("KDE Results (Density Estimation):");
         for (int i = 0; i < densities.length; i++) {
-            //System.out.printf("Feature: %s -> Density: %.4f%n", features.get(i), densities[i]);
+           // System.out.printf("Feature: %s -> Density: %.4f%n", features.get(i), densities[i]);
             if (densities[i] < densityThreshold) {
                 System.out.println("  -> Anomaly Detected (Low Density)!");
                 System.out.printf("Feature: %s -> Density: %.8f%n", features.get(i), densities[i]);
