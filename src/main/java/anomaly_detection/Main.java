@@ -30,13 +30,14 @@ public class Main {
 
                  // Step 5: Apply anomaly detection techniques
                 //System.out.println("\nRunning K-Means Clustering:");
-                //WekaKMeans.runKMeans(allFeatures, 3);
+               // WekaKMeans.runKMeans(allFeatures, 3);
 
-               // System.out.println("\nRunning GMM Clustering:");
+               System.out.println("\nRunning GMM Clustering:");
                 WekaGMM.runGMM(allFeatures);
 
                // System.out.println("\nRunning KDE:");
                //WekaKDE.runKDE(allFeatures);
+                
             };
             
           }  
